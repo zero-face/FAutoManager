@@ -1,0 +1,18 @@
+{
+  "properties": [
+    {
+      "name": "arros.plugin.enable",
+      "type": "java.lang.String",
+      "description": "是否开启插件"
+    },
+    {
+      "name": "arros.plugin.host",
+      "type": "java.lang.String",
+      "description": "IP地址"
+    },
+    {
+      "name": "arros.plugin.port",
+      "type": "java.lang.Integer",
+      "description": "端口"
+    }
+  ] }
