@@ -55,4 +55,12 @@ public class CommandUtils {
         System.out.println("error");
         System.out.println(error);
     }
+
+    public static void main(String[] args) {
+        try {
+            CommandUtils.execute(new File("./test.txt"), "dir/s");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

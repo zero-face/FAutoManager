@@ -35,19 +35,19 @@ public class LogCollectorAppender extends AbstractAppender {
     @Override
     public void append(LogEvent event) {
         // 这个if的作用是判断当连接建立后再发送日志
-        if (HeartBeat.getInstance() != null && HeartBeat.getInstance().getServiceId() != null) {
-            String serviceId = HeartBeat.getInstance().getServiceId();
+        HeartBeat heartBeat = HeartBeat.getInstance();
+        if (heartBeat != null && heartBeat.getServiceId() != null) {
+            String serviceId = heartBeat.getServiceId();
             String logStr = new String(getLayout().toByteArray(event));
-            String serverHost = HeartBeat.getInstance().getServerHost();
+            String serverHost = heartBeat.getServerHost();
+            Integer port = heartBeat.getPort();
             HttpRequest
-                    .post(serverHost + "/log")
+                    .post(serverHost + port + "/log")
                     .form("id", serviceId)
                     .form("log", logStr)
                     .header(Header.CONNECTION,"Keep-Alive")
                     .execute();
         }
-
-
     }
 
     @PluginFactory

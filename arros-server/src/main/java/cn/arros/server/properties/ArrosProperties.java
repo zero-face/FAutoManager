@@ -15,12 +15,11 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * @author Zero
  * @date 2021/11/12 20:25
- * @description
+ * @description 项目配置
  * @since 1.8
  **/
 @Configuration
 public class ArrosProperties {
-    // protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private ISysConfigService sysConfigService;
@@ -50,7 +49,7 @@ public class ArrosProperties {
     }
 
     /**
-     * 根据配置名从数据库获取配置
+     * 根据配置名从获取配置
      * @param configKey
      * @return configVal
      */
@@ -62,6 +61,11 @@ public class ArrosProperties {
         return Objects.requireNonNull(configVal);
     }
 
+    /**
+     * 根据配置类型拿取配置
+     * @param configType
+     * @return
+     */
     public String getConfig(ConfigType configType) {
         return getConfig(configType.getConfigKey());
     }

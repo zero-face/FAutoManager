@@ -11,12 +11,16 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class LogQueue {
     //队列大小
     public static final int QUEUE_MAX_SIZE = 10000;
-    private static final LogQueue logQueue = new LogQueue();
+
+    public static class LogQueueHolder{
+        private static final LogQueue logQueue = new LogQueue();
+    }
+
     //阻塞队列
     private final BlockingQueue<LogDto> queue = new LinkedBlockingQueue<>(QUEUE_MAX_SIZE);
 
     public static LogQueue getInstance() {
-        return logQueue;
+        return LogQueueHolder.logQueue;
     }
     /**
      * 消息入队

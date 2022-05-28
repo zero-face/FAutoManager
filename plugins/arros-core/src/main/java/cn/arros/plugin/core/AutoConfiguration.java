@@ -22,7 +22,8 @@ import java.net.UnknownHostException;
 /**
  * @Author Verge
  * @Refactor zero
- * @Description 当配置文件配置插件开启的时候会自动配置该类并且将配置内容映射到 CoreProperties.class
+ * @Description 当配置文件配置插件开启的时候会自动配置该类并且将配置内容映射到 CoreProperties.class同时准备心跳包定时发送出去
+ * TODO 排除hutool中的发请求方式，太重
  * @Date 2021/12/4 16:14
  * @Version 1.0
  */
@@ -40,6 +41,8 @@ public class AutoConfiguration {
     @Autowired
     private Environment environment;
 
+    private Boolean isRegistered;
+
     /**
      * 初始化
      * 获取项目的端口、名称、IP、PID后向server进行注册
@@ -55,17 +58,25 @@ public class AutoConfiguration {
         } catch (UnknownHostException e) {
             LOGGER.error(e.getMessage(),e);
         }
-        assert localHost != null : "机器的IP地址为空";
+        assert localHost != null : "机器的IP地址获取失败";
 
+        //拿到pid
         String pid = ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
 
         HeartBeatBody heartBeatBody = new HeartBeatBody(name, localHost.getHostAddress(), port, pid);
-        HeartBeat.init(heartBeatBody, properties.getHost());
+        //向服务端发起注册
+        //TODO 注册不成功则重试几次
+        HeartBeat.init(heartBeatBody, properties.getHost(), properties.getPort());
     }
 
+    /**
+     * 每隔10秒向服务端发出一个心跳
+     */
     @Scheduled(fixedDelay = 10000)
     public void beat() {
-        HeartBeat.getInstance().beat();
+        HeartBeat heartBeat = HeartBeat.getInstance();
+        assert heartBeat != null : "服务尚未注册";
+        heartBeat.beat();
     }
 }
 
