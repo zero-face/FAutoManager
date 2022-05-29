@@ -41,7 +41,9 @@ public class AutoConfiguration {
     @Autowired
     private Environment environment;
 
-    private Boolean isRegistered;
+    private boolean isRegistered;
+
+    private static final Integer RETRY_TIMES = 5;
 
     /**
      * 初始化
@@ -49,7 +51,7 @@ public class AutoConfiguration {
      * TODO：此处查询到的IP是本地IP
      */
     @PostConstruct
-    public void init() {
+    public void init() throws Exception {
         String port = environment.getProperty("server.port");
         String name = environment.getProperty("spring.application.name");
         InetAddress localHost = null;
@@ -66,7 +68,7 @@ public class AutoConfiguration {
         HeartBeatBody heartBeatBody = new HeartBeatBody(name, localHost.getHostAddress(), port, pid);
         //向服务端发起注册
         //TODO 注册不成功则重试几次
-        HeartBeat.init(heartBeatBody, properties.getHost(), properties.getPort());
+        isRegistered = HeartBeat.init(heartBeatBody, properties.getHost(), properties.getPort());
     }
 
     /**
@@ -74,9 +76,15 @@ public class AutoConfiguration {
      */
     @Scheduled(fixedDelay = 10000)
     public void beat() {
-        HeartBeat heartBeat = HeartBeat.getInstance();
-        assert heartBeat != null : "服务尚未注册";
-        heartBeat.beat();
+        if(isRegistered) {
+            HeartBeat heartBeat = HeartBeat.getInstance();
+            if(heartBeat == null) {
+                LOGGER.error("服务尚未注册");
+            }
+            LOGGER.debug("发送心跳");
+            heartBeat.beat();
+        }
+
     }
 }
 
