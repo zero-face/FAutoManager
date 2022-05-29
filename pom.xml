@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
-        <module>modules/common</module>
-        <module>modules/server</module>
-        <module>modules/plugins</module>
+        <module>arros-common</module>
+        <module>arros-server</module>
+        <module>plugins/arros-core</module>
     </modules>
 
     <parent>
