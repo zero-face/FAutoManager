@@ -23,7 +23,6 @@ import java.io.Serializable;
 public class LogCollectorAppender extends AbstractAppender {
     public static final String PLUGIN_NAME = "ArrosLogCollector";
 
-
     protected LogCollectorAppender(String name,
                                 Filter filter,
                                 Layout<? extends Serializable> layout,
