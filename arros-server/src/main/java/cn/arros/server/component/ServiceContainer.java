@@ -72,6 +72,7 @@ public class ServiceContainer {
 
     /**
      * 每30s检测一次是否有死亡或复活服务
+     * TODO 此处有bug，随着项目时间增长，几乎感知不到节点死亡
      */
     @Scheduled(fixedDelay = 30000)
     public void checkStatus() {

@@ -1,6 +1,8 @@
 package cn.arros.server.controller;
 
 import cn.arros.server.component.LogCollector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,10 +19,11 @@ import java.io.IOException;
 public class LogCollectController {
     @Autowired
     private LogCollector logCollector;
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PostMapping("/log")
     public void test(@RequestParam String id, @RequestParam String log) throws IOException {
-        System.out.println(log);
+        logger.info(id + "发来一条日志: " + log);
         logCollector.save(id,log);
     }
 }

@@ -25,7 +25,7 @@ import java.io.IOException;
 public class GitUtils {
     private static final ArrosProperties arrosProperties = SpringUtil.getBean(ArrosProperties.class);
 
-    private static final Logger log = LoggerFactory.getLogger(GitUtils.class);
+    protected static final Logger log = LoggerFactory.getLogger(GitUtils.class);
 
     /**
      * 克隆仓库

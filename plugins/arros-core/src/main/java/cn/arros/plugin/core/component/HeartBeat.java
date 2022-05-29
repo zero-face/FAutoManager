@@ -1,6 +1,7 @@
 package cn.arros.plugin.core.component;
 
 import cn.arros.common.dto.HeartBeatBody;
+import cn.hutool.http.HttpException;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -32,37 +33,56 @@ public class HeartBeat{
         this.port = port;
     }
 
-    public static void init(HeartBeatBody heartBeatBody, String serverHost, Integer port) {
-        LOGGER.info("注册: " + heartBeatBody);
+    //注册失败会重试三次
+    public static boolean init(HeartBeatBody heartBeatBody, String serverHost, Integer port) throws Exception {
+        LOGGER.info("注册到 " + serverHost + ":" + port + "/beat/register");
+        LOGGER.info("注册信息 " + heartBeatBody);
+        Object isRegistered = new RetryTemplate() {
+            @Override
+            protected Object doBiz() {
+                try {
+                    String response = null;
+                    response = HttpRequest
+                            .post(serverHost + ":" + port + "/beat/register")
+                            .body(JSONUtil.toJsonStr(heartBeatBody))
+                            .execute()
+                            .body();
+                    JSONObject jsonObject = new JSONObject(response);
+                    String serviceId = jsonObject.getStr("data");
+                    //注册成功后服务端会颁发一个唯一ID，然后用这个ID生成一个唯一的心跳对象
+                    heartBeat = new HeartBeat(serviceId, serverHost, port);
+                    return true;
+                } catch (Exception e) {
+                    throw new RuntimeException("注册失败");
+                }
 
-        String response = HttpRequest
-                .post(serverHost + port + "/beat/register")
-                .body(JSONUtil.toJsonStr(heartBeatBody))
-                .execute()
-                .body();
-        JSONObject jsonObject = new JSONObject(response);
-        String serviceId = jsonObject.getStr("data");
-        //注册成功之后才单例生成一个心跳对象
-        heartBeat = new HeartBeat(serviceId, serverHost, port);
+            }
+        }.setRetryTime(3).execute();
+        LOGGER.info("是否注册成功：" + isRegistered);
+        return (Boolean) isRegistered;
 
-        LOGGER.info("注册成功");
     }
 
     public static HeartBeat getInstance() {
         return heartBeat;
     }
 
-    // TODO: 2022/5/28 添加失败重试机制：具体如何重试待考究！
     public void beat() {
         LOGGER.debug("发送心跳");
 
-        String response = HttpRequest
-                .post(serverHost + port + "/beat")
-                .form("id", serviceId)
-                .execute()
-                .body();
+        String response = null;
+        try {
+            response = HttpRequest
+                    .post(serverHost +":" + port + "/beat")
+                    .form("id", serviceId)
+                    .execute()
+                    .body();
+            LOGGER.debug(response);
+        } catch (HttpException e) {
+            LOGGER.error("发送心跳失败");
+        }
 
-        LOGGER.info(response);
+
     }
 
     public String getServiceId() {

@@ -31,10 +31,12 @@ public class LogCollectorAppender extends AbstractAppender {
         super(name, filter, layout, ignoreExceptions, properties);
     }
 
-    // TODO：可以用一个List暂存日志，达到一定阈值后发送
+    // TODO：可以用一个List暂存日志，达到一定阈值后发送（一定要改）
+    // 替代方案：
     @Override
     public void append(LogEvent event) {
         // 这个if的作用是判断当连接建立后再发送日志
+        System.out.println("进入appender");
         HeartBeat heartBeat = HeartBeat.getInstance();
         if (heartBeat != null && heartBeat.getServiceId() != null) {
             String serviceId = heartBeat.getServiceId();
@@ -42,7 +44,7 @@ public class LogCollectorAppender extends AbstractAppender {
             String serverHost = heartBeat.getServerHost();
             Integer port = heartBeat.getPort();
             HttpRequest
-                    .post(serverHost + port + "/log")
+                    .post(serverHost + ":" + port + "/log")
                     .form("id", serviceId)
                     .form("log", logStr)
                     .header(Header.CONNECTION,"Keep-Alive")

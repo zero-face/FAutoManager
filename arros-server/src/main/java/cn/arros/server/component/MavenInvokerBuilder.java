@@ -28,7 +28,7 @@ public class MavenInvokerBuilder {
 
     public MavenInvokerBuilder() {
         this.invoker = new DefaultInvoker();
-        invoker.setMavenHome(new File(System.getenv("MAVEN_HOME")));
+        invoker.setMavenHome(new File(System.getenv("M2_HOME")));
         invoker.setLogger(new SLF4JInvokerLogger(logger));
         invoker.setOutputHandler(new SLF4JOutputHandler(logger));
         invoker.setErrorHandler(new SLF4JOutputHandler(logger));
