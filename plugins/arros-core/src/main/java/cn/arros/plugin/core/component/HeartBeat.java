@@ -55,7 +55,6 @@ public class HeartBeat{
                 } catch (Exception e) {
                     throw new RuntimeException("注册失败");
                 }
-
             }
         }.setRetryTime(3).execute();
         LOGGER.info("是否注册成功：" + isRegistered);

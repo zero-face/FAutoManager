@@ -40,8 +40,9 @@ public class MavenInvokerBuilder {
         String basePath = arrosProperties.getConfig(ConfigType.REPO_PATH);
 
         InvocationRequest request = new DefaultInvocationRequest();
+        //确定唯一仓库
         request.setBaseDirectory(new File(basePath, repoId));
-
+        //设置打包命令
         request.setGoals(Arrays.asList("clean","package",command));
 
         InvocationResult result = invoker.execute(request);
