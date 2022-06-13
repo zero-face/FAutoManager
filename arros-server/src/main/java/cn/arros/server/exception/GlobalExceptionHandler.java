@@ -17,9 +17,14 @@ public class GlobalExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(GitAPIException.class)
-    public CommonResult handlerGitAPIException(){
-        log.error("error");
+    public CommonResult handlerGitAPIException(Exception e){
+        log.error(e.getMessage());
         return CommonResult.error();
+    }
+    @ExceptionHandler(Exception.class)
+    public CommonResult handlerException(Exception e) {
+        log.error(e.getMessage());
+        return CommonResult.error(e.getMessage());
     }
 
 }
