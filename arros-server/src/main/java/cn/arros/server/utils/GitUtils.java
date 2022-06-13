@@ -37,6 +37,9 @@ public class GitUtils {
     public static Git clone(String url, String filename) throws GitAPIException {
         System.out.println(arrosProperties);
         File file = new File(arrosProperties.getConfig(ConfigType.REPO_PATH) + "/" +filename);
+        if(file.exists() && file.listFiles().length > 0) {
+            log.warn("文件已存在");
+        }
         log.info("从{}克隆至{}", url, file.getAbsolutePath());
         return Git.cloneRepository()
                 .setURI(url)
