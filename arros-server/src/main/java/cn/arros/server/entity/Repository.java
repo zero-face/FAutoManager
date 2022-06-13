@@ -4,8 +4,11 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 
+import com.sun.istack.internal.NotNull;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import javax.validation.constraints.NotBlank;
 
 /**
  * <p>
@@ -25,22 +28,60 @@ public class Repository extends BaseEntity implements Serializable {
     private String id;
 
     @ApiModelProperty("仓库名称")
+    @NotBlank
     private String name;
+
+    @ApiModelProperty("仓库地址")
+    private String url;
 
     @ApiModelProperty("仓库地址")
     private String gitUrl;
 
-    @ApiModelProperty("登录用户名")
-    private String username;
+    @ApiModelProperty("仓库地址")
+    private String sshUrl;
 
-    @ApiModelProperty("登录密码")
-    private String password;
+    @ApiModelProperty("创建者")
+    @NotBlank
+    private String creator;
 
-    @ApiModelProperty("公钥")
-    private String rsaPub;
+    @ApiModelProperty("所在组织名")
+    private String orgName;
 
-    @ApiModelProperty("私钥")
-    private String rsaPrv;
+    @ApiModelProperty("仓库描述")
+    private String description = "zeroPoint-studio development";
+
+    @ApiModelProperty("仓库是否私有")
+    private Boolean privateRepo = false;
+
+    @ApiModelProperty("是否自动初始化")
+    private Boolean autoInit = true;
+
+    @ApiModelProperty("gitignore模板")
+    private String gitignoreTemplate = "Java";
+
+    public String getGitUrl() {
+        return gitUrl;
+    }
+
+    public void setGitUrl(String gitUrl) {
+        this.gitUrl = gitUrl;
+    }
+
+    public String getSshUrl() {
+        return sshUrl;
+    }
+
+    public void setSshUrl(String sshUrl) {
+        this.sshUrl = sshUrl;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
 
     public String getId() {
         return id;
@@ -58,44 +99,52 @@ public class Repository extends BaseEntity implements Serializable {
         this.name = name;
     }
 
-    public String getGitUrl() {
-        return gitUrl;
+    public String getUrl() {
+        return url;
     }
 
-    public void setGitUrl(String gitUrl) {
-        this.gitUrl = gitUrl;
+    public void setUrl(String gitUrl) {
+        this.url = gitUrl;
     }
 
-    public String getUsername() {
-        return username;
+    public String getOrgName() {
+        return orgName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
     }
 
-    public String getPassword() {
-        return password;
+    public String getDescription() {
+        return description;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getRsaPub() {
-        return rsaPub;
+    public Boolean getPrivateRepo() {
+        return privateRepo;
     }
 
-    public void setRsaPub(String rsaPub) {
-        this.rsaPub = rsaPub;
+    public void setPrivateRepo(Boolean privateRepo) {
+        this.privateRepo = privateRepo;
     }
 
-    public String getRsaPrv() {
-        return rsaPrv;
+    public Boolean getAutoInit() {
+        return autoInit;
     }
 
-    public void setRsaPrv(String rsaPrv) {
-        this.rsaPrv = rsaPrv;
+    public void setAutoInit(Boolean autoInit) {
+        this.autoInit = autoInit;
+    }
+
+    public String getGitignoreTemplate() {
+        return gitignoreTemplate;
+    }
+
+    public void setGitignoreTemplate(String gitignoreTemplate) {
+        this.gitignoreTemplate = gitignoreTemplate;
     }
 
     @Override
@@ -103,11 +152,13 @@ public class Repository extends BaseEntity implements Serializable {
         return "Repository{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", gitUrl='" + gitUrl + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", rsaPub='" + rsaPub + '\'' +
-                ", rsaPrv='" + rsaPrv + '\'' +
+                ", url='" + url + '\'' +
+                ", creator='" + creator + '\'' +
+                ", orgName='" + orgName + '\'' +
+                ", description='" + description + '\'' +
+                ", privateRepo=" + privateRepo +
+                ", autoInit=" + autoInit +
+                ", gitignoreTemplate='" + gitignoreTemplate + '\'' +
                 '}';
     }
 }
