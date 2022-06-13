@@ -3,7 +3,7 @@
     {
       "name": "arros.plugin.enable",
       "type": "java.lang.Boolean",
-      "defaultValue": false,
+      "defaultValue": true,
       "description": "是否开启插件"
     },
     {

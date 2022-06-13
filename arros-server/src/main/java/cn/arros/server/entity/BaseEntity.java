@@ -10,6 +10,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @Author Verge
@@ -21,37 +22,39 @@ public class BaseEntity {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    private LocalDateTime createTime;
+    @TableField(fill = FieldFill.INSERT)
+    private Date createTime;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    private LocalDateTime updateTime;
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private Date updateTime;
 
     @TableLogic
-    private Integer isDelete;
+    private Boolean isDelete;
 
-    public LocalDateTime getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(LocalDateTime createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    public LocalDateTime getUpdateTime() {
+    public Date getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(LocalDateTime updateTime) {
+    public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
 
-    public Integer getIsDelete() {
+    public Boolean getIsDelete() {
         return isDelete;
     }
 
-    public void setIsDelete(Integer isDelete) {
+    public void setIsDelete(Boolean isDelete) {
         this.isDelete = isDelete;
     }
 }
