@@ -2,15 +2,19 @@ package cn.arros.server.service.impl;
 
 import cn.arros.server.constant.ConfigType;
 import cn.arros.server.entity.BuildInfo;
+import cn.arros.server.entity.Repository;
 import cn.arros.server.mapper.BuildInfoMapper;
 import cn.arros.server.properties.ArrosProperties;
 import cn.arros.server.service.BuildInfoService;
+import cn.arros.server.utils.GitUtils;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -40,5 +44,15 @@ public class BuildInfoServiceImpl extends ServiceImpl<BuildInfoMapper, BuildInfo
 
         buildInfo.setResultPath(resultPath.toString());
         return buildInfoMapper.insert(buildInfo);
+    }
+
+    @Override
+    public void fetchAndBuild(Repository repository) throws GitAPIException {
+        GitUtils.clone(repository.getSshUrl(), repository.getName());
+    }
+
+    @Override
+    public void pullAndBuild(Repository repository) throws GitAPIException, IOException {
+        GitUtils.pull(repository.getId());
     }
 }

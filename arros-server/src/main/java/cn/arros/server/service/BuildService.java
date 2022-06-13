@@ -47,7 +47,13 @@ public class BuildService implements Runnable{
     public BuildService(BuildInfo buildInfo) {
         this.buildInfo = buildInfo;
     }
-
+    /*
+     * 构建流程
+     * 准备：向表build_history插入基本信息
+     * 拉取资源：执行git pull获取最新源码
+     * 执行命令：执行打包命令
+     * 部署：部署至服务器
+     */
     @Override
     public void run() {
         List<Supplier<Boolean>> list = new ArrayList<>(4);
@@ -65,13 +71,6 @@ public class BuildService implements Runnable{
 
     }
 
-    /*
-     * 构建流程
-     * 准备：向表build_history插入基本信息
-     * 拉取资源：执行git pull获取最新源码
-     * 执行命令：执行打包命令
-     * 部署：部署至服务器
-     */
 
     /**
      * 准备阶段
@@ -160,7 +159,6 @@ public class BuildService implements Runnable{
 
         return true;
     }
-
 
     private boolean deploy(){
         logger.info("开始部署");

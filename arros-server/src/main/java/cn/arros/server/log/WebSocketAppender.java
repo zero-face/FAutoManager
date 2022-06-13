@@ -31,6 +31,7 @@ public class WebSocketAppender extends AbstractAppender {
     }
 
     // TODO：暂时使用synchronized解决并发问题
+    // 将日志写入阻塞队列中
     @Override
     public void append(LogEvent event) {
         synchronized (this) {

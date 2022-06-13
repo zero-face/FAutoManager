@@ -1,7 +1,11 @@
 package cn.arros.server.service;
 
 import cn.arros.server.entity.BuildInfo;
+import cn.arros.server.entity.Repository;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.eclipse.jgit.api.errors.GitAPIException;
+
+import java.io.IOException;
 
 /**
  * <p>
@@ -19,6 +23,7 @@ public interface BuildInfoService extends IService<BuildInfo> {
      */
     int addBuildInfo(BuildInfo buildInfo);
 
+    void fetchAndBuild(Repository repository) throws GitAPIException;
 
-
+    void pullAndBuild(Repository repository) throws GitAPIException, IOException;
 }
